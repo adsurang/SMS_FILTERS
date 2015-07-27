@@ -23,11 +23,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "RuleSets9";
 
-    // Contacts table name
+    // Rules and MessaheHash table name
     private static final String TABLE_RULES = "Rules";
     private static final String TABLE_TAGS = "Tags";
 
-    // Contacts Table Columns names
+    //  Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
     private static final String KEY_EXPRESSION = "expression";
@@ -66,13 +66,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    // Adding new contact
+    // Adding new rule
     public void addRule(Rule newRule) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_NAME, newRule.name); // Contact Name
-        values.put(KEY_EXPRESSION, newRule.rule); // Contact Phone Number
+        values.put(KEY_NAME, newRule.name);
+        values.put(KEY_EXPRESSION, newRule.rule);
         values.put(KEY_DESTINATION, newRule.destinationFolder);
 
         // Inserting Row
@@ -102,7 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        // return contact list
+        // return rule list
         return ruleList;
     }
 
@@ -133,7 +133,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    // Getting single contact
+    // Getting single message
     public MessageHash getMessage(int msg_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -147,7 +147,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     cursor.getString(2));
             message.id = Integer.parseInt(cursor.getString(0));
 
-            // return contact
+            // return message
             return message;
         }
         else{
@@ -205,7 +205,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         }
 
-        // return contact list
+        // return message list
         return messageList;
     }
 

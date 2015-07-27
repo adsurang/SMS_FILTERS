@@ -17,7 +17,7 @@ public class RuleActivity extends Activity {
         /**
          * CRUD Operations
          * */
-        // Inserting Contacts
+        // Inserting RULES
         Log.d("Insert: ", "Inserting ..");
         db.addRule(new Rule("Rule1", "Tag1", "Folder1"));
         db.addRule(new Rule("Rule2", "Tag2", "Folder2"));
@@ -30,7 +30,7 @@ public class RuleActivity extends Activity {
         db.addMessage(new MessageHash(734, "SBI, PANKAJ"));
         db.addMessage(new MessageHash(735, "ABHINAV ,SBI"));
 
-        // Reading all contacts
+        // Reading all Rules
         Log.d("Reading: ", "Reading all Rules..");
         List<Rule> rules = db.getAllRules();
 
@@ -39,7 +39,7 @@ public class RuleActivity extends Activity {
 
         for (Rule cn : rules) {
             String log = "Id: "+cn.id+" ,Name: " + cn.name + " ,Expression: " + cn.rule + ", Destination:" + cn.destinationFolder;
-            // Writing Contacts to log
+            // Writing Rules to log
             Log.d("Name: ", log);
         }
     }
