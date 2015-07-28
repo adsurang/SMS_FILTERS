@@ -1,10 +1,4 @@
 <html>
-<script>
-function showAllSMS(){
-    //JSON.parse(window.JSInterface.showAllSMS());
-     alert(window.JSInterface.showAllSMS());
-}
-</script>
 <head>
     <title>SMS Filter</title>
     <meta charset="utf-8">
@@ -18,24 +12,16 @@ function showAllSMS(){
     .newstyle {
     width:49%;
     }
-
-
-
-
     table,tbody{
     display:block;
     }
-
     tbody {
     border: 1px black;
     font-size:50px;
     width:100%;
     Height: 400px;
     overflow-y: auto;    /* Trigger vertical scroll    */
-
-
     }
-
     td {
     width:300px;
     }
@@ -65,26 +51,82 @@ function showAllSMS(){
     </ul>
     <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
-            <table >
+            <html>
+            <script type="text/javascript">
+function AddFolders(){
+    var folders =   window.JSInterface.getALLFolders()
+    var filters = JSON.parse(folders);
 
-                <tr bgcolor="#00CED1">
-                    <td>ICICI</td>
 
+    var table = document.getElementById("folders");
+
+    for(var i=0; i< filters.length; i++){
+	var row = table.insertRow(1);
+	if((i+1)%2 == 0){
+	row.className = "even";
+	}
+	else{
+	row.className = "odd";
+	}
+
+       var cell1 = row.insertCell(0);
+       cell1.innerHTML = filters[i];
+	}
+
+addRowHandlers();
+}
+
+
+function addRowHandlers() {
+
+    var table = document.getElementById("folders");
+    var rows = table.getElementsByTagName("tr");
+    for (i = 0; i < rows.length; i++) {
+        var currentRow = table.rows[i];
+        var createClickHandler =
+            function(row)
+            {
+                return function() {
+                                        var cell = row.getElementsByTagName("td")[0];
+                                        var id = cell.innerHTML;
+                                        onRowClick(id);
+                                 };
+            }
+
+        currentRow.onclick = createClickHandler(currentRow);
+    }
+}
+
+function onRowClick(folderName){
+     window.JSInterface.onFolderClick(folderName)
+}
+
+</script>
+            <head>
+                <style>
+                    tr{
+                    height: 100px;
+                    font-size:150%;
+                    }
+
+                    tr.odd {
+                    background-color: #87CEFA;
+                    }
+
+                </style>
+            </head>
+            <body>
+            <table id="folders" style="width:100%">
+                <tr class="odd">
+                    <td>All</td>
                 </tr>
-                <tr bgcolor="#20B2AA">
-                    <td>SBI</td>
-
-                </tr>
-
-                <tr bgcolor="#00CED1">
-                    <td>BookMyShow</td>
-
-                </tr>
-                <tr bgcolor="#20B2AA">
-                    <td>Shopping</td>
-
-                </tr>
+                <script type="text/javascript">
+        AddFolders();
+     </script>
             </table>
+
+            </body>
+            </html>
         </div>
         <div id="menu1" class="tab-pane fade">
             <table  >

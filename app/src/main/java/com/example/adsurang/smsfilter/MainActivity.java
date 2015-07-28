@@ -41,7 +41,7 @@ public class MainActivity extends Activity {
         });
 
         // Load html in webview
-        webview.loadUrl("file:///android_asset/FolderVIew.html");
+        webview.loadUrl("file:///android_asset/ShowAllSMS.html");
 
         // Below is not working
         //webview.loadDataWithBaseURL("file:///android_asset/CreateOrUpdateRule.html",""
