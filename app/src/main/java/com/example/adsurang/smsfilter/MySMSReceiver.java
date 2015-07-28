@@ -31,6 +31,7 @@ public class MySMSReceiver extends BroadcastReceiver {
         String SmsSender = shortMessage.getOriginatingAddress();
         String DisplayMessage = shortMessage.getDisplayMessageBody();
 
+
         Log.d("SMSReceiver", "SMS message sender: " + SmsSender);
         Log.d("SMSReceiver","SMS message text: "+ DisplayMessage);
 
