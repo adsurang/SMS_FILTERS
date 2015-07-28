@@ -40,7 +40,7 @@ public class JavaScriptInterface {
         int totalSMS = c.getCount();
 
         if (c.moveToFirst()) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 10; i++) {
 
                 objSms = new Sms();
                 objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
