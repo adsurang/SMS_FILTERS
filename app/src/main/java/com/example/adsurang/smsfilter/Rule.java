@@ -6,18 +6,22 @@ package com.example.adsurang.smsfilter;
 public class Rule {
     int id;
     public String name;
-    public String rule;
+    public String fromRule;
+    public String contentRule;
+    public boolean doAndRule;
     public String destinationFolder;
 
     public Rule(){
 
     }
 
-    public Rule( String name, String rule, String Destination){
+    public Rule( String name, String fromrule, String contentRule, boolean isAndRule, String destination ){
 
         this.name = name;
-        this.rule = rule;
-        this.destinationFolder = Destination;
+        this.fromRule = fromrule;
+        this.contentRule = contentRule;
+        this.doAndRule = isAndRule;
+        this.destinationFolder = destination;
     }
 
 }
