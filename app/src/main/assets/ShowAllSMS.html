@@ -1,13 +1,22 @@
 <html>
 <script>
 
+    function CreateFilter(){
+    window.JSInterface.createApplyFromRule("VFCARE", "VFCARE");
+    }
+
     function AddMessages(){
-    var msgs =   window.JSInterface.showAllSMS()
+    var msgs;
+    if(SelectedFolder == "All"){
+     msgs =   window.JSInterface.showAllSMS("");
+    }else{
+      msgs =   window.JSInterface.showAllSMS(SelectedFolder);
+    }
     var objectMsgs = JSON.parse(msgs);
 
 
     var table = document.getElementById("messages");
-
+table.innerHTML = "";
     for(var i=0; i< objectMsgs.length; i++){
 	var row = table.insertRow(0);
 	if((i+1)%2 == 0){
@@ -27,9 +36,9 @@
     <title>SMS Filter</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <script src="jquery.min.js"></script>
+    <script src="bootstrap.min.js"></script>
 </head>
 <body>
 <style>
@@ -72,18 +81,30 @@
     background-color: #87CEFA;
     }
 
+    tr.even{
+    height: 100px;
+    font-size:50%;
+    }
+
+    tr.odd {
+    background-color: #87CEFA;
+    height: 100px;
+    font-size:50%;
+    }
+
 </style>
 <div class="container">
     <h2>SMS Filter</h2>
     <ul class="nav nav-pills">
-        <li class="active newstyle"><a data-toggle="pill" href="#home">Folders</a></li>
-        <li class="newstyle"><a data-toggle="pill" href="#menu1">Message</a></li>
+        <li id="foldertab" class="active newstyle"><a data-toggle="pill" href="#home">Folders</a></li>
+        <li id="messagetab" class="newstyle"><a data-toggle="pill" href="#menu1">Message</a></li>
     </ul>
     <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
-            <html>
+
             <script type="text/javascript">
 function AddFolders(){
+    SelectedFolder = "ALL";
     var folders =   window.JSInterface.getALLFolders()
     var filters = JSON.parse(folders);
 
@@ -128,35 +149,36 @@ function addRowHandlers() {
 }
 
 function onRowClick(folderName){
-     window.JSInterface.onFolderClick(folderName)
+
+    SelectedFolder = folderName;
+    AddMessages();
+     $jquery = document.getElementById("foldertab");
+     $jquery.classList.remove("active");
+     $jquery = document.getElementById("messagetab");
+     $jquery.classList.add("active");
+
+     $jquery = document.getElementById("home");
+     $jquery.classList.remove("active");
+    $jquery.classList.remove("in");
+    $jquery = document.getElementById("menu1");
+    $jquery.classList.add("active");
+    $jquery.classList.add("in");
 }
 
 </script>
-            <head>
-                <style>
-                    tr{
-                    height: 100px;
-                    font-size:50%;
-                    }
 
-                    tr.odd {
-                    background-color: #87CEFA;
-                    }
-
-                </style>
-            </head>
-            <body>
+            <div class="folderTable">
             <table id="folders" style="width:100%">
                 <tr class="odd">
                     <td>All</td>
                 </tr>
                 <script type="text/javascript">
-        AddFolders();
-     </script>
+                     AddFolders();
+                </script>
             </table>
 
-            </body>
-            </html>
+            </div>
+
         </div>
         <div id="menu1" class="tab-pane fade">
             <table  id="messages">
@@ -173,7 +195,7 @@ function onRowClick(folderName){
             <h3>Menu 3</h3>
             <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
         </div>
-        <button type="button" class="button">Create Filter</button>
+        <button type="button" class="button" onclick="CreateFilter()">Create Filter</button>
     </div>
 </div>
 </body>
