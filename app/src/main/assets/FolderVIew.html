@@ -1,0 +1,76 @@
+<html>
+<script type="text/javascript">
+function AddFolders(){
+    var folders =   window.JSInterface.getALLFolders()
+    var filters = JSON.parse(folders);
+
+
+    var table = document.getElementById("folders");
+
+    for(var i=0; i< filters.length; i++){
+	var row = table.insertRow(1);
+	if((i+1)%2 == 0){
+	row.className = "even";
+	}
+	else{
+	row.className = "odd";
+	}
+
+       var cell1 = row.insertCell(0);
+       cell1.innerHTML = filters[i];
+	}
+
+addRowHandlers();
+}
+
+
+function addRowHandlers() {
+
+    var table = document.getElementById("folders");
+    var rows = table.getElementsByTagName("tr");
+    for (i = 0; i < rows.length; i++) {
+        var currentRow = table.rows[i];
+        var createClickHandler =
+            function(row)
+            {
+                return function() {
+                                        var cell = row.getElementsByTagName("td")[0];
+                                        var id = cell.innerHTML;
+                                        onRowClick(id);
+                                 };
+            }
+
+        currentRow.onclick = createClickHandler(currentRow);
+    }
+}
+
+function onRowClick(folderName){
+     window.JSInterface.onFolderClick(folderName)
+}
+
+</script>
+<head>
+    <style>
+        tr{
+        height: 100px;
+        font-size:150%;
+        }
+
+        tr.odd {
+        background-color: #87CEFA;
+        }
+
+    </style>
+</head>
+<body>
+<table id="folders" style="width:100%">
+    <tr class="odd">
+        <td>All</td>
+    </tr>
+    <script type="text/javascript">
+        AddFolders();
+     </script>
+</table>
+
+</body>
+</html>

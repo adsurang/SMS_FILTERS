@@ -1,7 +1,10 @@
 <html>
 <script>
 function showAllSMS(){
-    alert(window.JSInterface.showAllSMS());
+    //alert(window.JSInterface.showAllSMS());
+    var serailizedmsg =   window.JSInterface.showAllSMS()
+    var smses = JSON.parse(text);
+    alert(smses);
 }
 </script>
 <head>
