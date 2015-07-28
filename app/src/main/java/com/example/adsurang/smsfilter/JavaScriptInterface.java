@@ -53,7 +53,7 @@ public class JavaScriptInterface {
         }
 
         if (c.moveToFirst()) {
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 10; i++) {
                 objSms = new Sms();
                 int messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
                 if(getAllMessages || validMessageIds.contains(messageId)){

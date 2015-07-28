@@ -1,4 +1,28 @@
 <html>
+<script>
+
+    function AddMessages(){
+    var msgs =   window.JSInterface.showAllSMS()
+    var objectMsgs = JSON.parse(msgs);
+
+
+    var table = document.getElementById("messages");
+
+    for(var i=0; i< objectMsgs.length; i++){
+	var row = table.insertRow(0);
+	if((i+1)%2 == 0){
+	row.className = "msgeven";
+	}
+	else{
+	row.className = "msgodd";
+	}
+
+       var cell1 = row.insertCell(0);
+       cell1.innerHTML = "<td> <div class=\"fromname\">" + objectMsgs[i]._address+ "</div> <div class=\"line\">"+objectMsgs[i]._msg+"</div> </td>";
+	}
+}
+
+</script>
 <head>
     <title>SMS Filter</title>
     <meta charset="utf-8">
@@ -33,13 +57,19 @@
     }
 
     .line {
-    height:30px;
+    margin-bottom:20px;
+    height:35px;
     font-size:15px;
+    overflow:hidden
     }
 
     .fromname{
-    height:70px;
+    height:30px;
     font-size:25px;
+    }
+
+    tr.msgodd {
+    background-color: #87CEFA;
     }
 
 </style>
@@ -106,7 +136,7 @@ function onRowClick(folderName){
                 <style>
                     tr{
                     height: 100px;
-                    font-size:150%;
+                    font-size:50%;
                     }
 
                     tr.odd {
@@ -129,85 +159,10 @@ function onRowClick(folderName){
             </html>
         </div>
         <div id="menu1" class="tab-pane fade">
-            <table  >
-
-                <tbody>
-                <tr bgcolor="#00CED1">
-                    <td>
-                        <div class="fromname">
-                            ICICI
-                        </div>
-
-                        <div class="line">
-                            your salary is 200000 Rs.
-                        </div>
-                    </td>
-
-                </tr>
-                <tr bgcolor="#FFFFFF">
-                    <td>
-                        <div class="fromname">
-                            BookMyShow
-                        </div>
-
-                        <div class="line">
-                            go and watch Bajrangi bhaijaan
-                        </div>
-                    </td>
-
-                </tr>
-
-                <tr bgcolor="#00CED1">
-                    <td>
-                        <div class="fromname">
-                            ATM
-                        </div>
-
-                        <div class="line">
-                            you have debited 1500/- from ATM
-                        </div>
-                    </td>
-
-                </tr>
-                <tr bgcolor="#FFFFFF">
-                    <td>
-                        <div class="fromname">
-                            MakeMyTrip
-                        </div>
-
-                        <div class="line">
-                            go and visit jaipur
-                        </div>
-                    </td>
-
-                </tr>
-
-                <tr bgcolor="#00CED1">
-                    <td>ICICI</td>
-
-                </tr>
-                <tr bgcolor="#FFFFFF">
-                    <td>SBI</td>
-
-                </tr>
-
-                <tr bgcolor="#00CED1">
-                    <td>ICICI</td>
-
-                </tr>
-                <tr bgcolor="#FFFFFF">
-                    <td>SBI</td>
-
-                </tr>
-                <tr bgcolor="#00CED1">
-                    <td>ICICI</td>
-
-                </tr>
-                <tr bgcolor="#FFFFFF">
-                    <td>SBI</td>
-
-                </tr>
-                </tbody>
+            <table  id="messages">
+                <script type="text/javascript">
+        AddMessages();
+     </script>
             </table>
         </div>
         <div id="menu2" class="tab-pane fade">
