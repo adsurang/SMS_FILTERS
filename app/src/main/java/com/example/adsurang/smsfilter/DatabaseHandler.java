@@ -21,7 +21,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "RuleSets9";
+    private static final String DATABASE_NAME = "RuleSets1_9";
 
     // Rules and MessaheHash table name
     private static final String TABLE_RULES = "Rules";
@@ -30,7 +30,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     //  Table Columns names
     private static final String KEY_ID = "id";
     private static final String KEY_NAME = "name";
-    private static final String KEY_EXPRESSION = "expression";
+    private static final String KEY_FROMEXPRESSION = "fromexpression";
+    private static final String KEY_MESSAGEBODYEXPRESSION = "messagebodyexpression";
+    private static final String KEY_DOANDEXPRESSION = "doandexpressions";
     private static final String KEY_DESTINATION = "destination";
     private static final String TAGS_ID = "id";
     private static final String TAGS_MSG_ID = "msg_id";
@@ -47,7 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_RULES_TABLE = "CREATE TABLE " + TABLE_RULES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_EXPRESSION + " TEXT," + KEY_DESTINATION + " TEXT" + ")";
+                + KEY_FROMEXPRESSION + " TEXT," + KEY_MESSAGEBODYEXPRESSION + " TEXT," + KEY_DOANDEXPRESSION + " TEXT," + KEY_DESTINATION + " TEXT" + ")";
 
         String CREATE_TAGS_TABLE = "CREATE TABLE " + TABLE_TAGS + "("
                 + TAGS_ID + " INTEGER PRIMARY KEY," + TAGS_MSG_ID + " INTEGER, "
@@ -72,7 +74,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, newRule.name);
-        values.put(KEY_EXPRESSION, newRule.rule);
+        values.put(KEY_FROMEXPRESSION, newRule.fromRule);
+        values.put(KEY_MESSAGEBODYEXPRESSION, newRule.contentRule);
+        values.put(KEY_DOANDEXPRESSION, newRule.doAndRule);
         values.put(KEY_DESTINATION, newRule.destinationFolder);
 
         // Inserting Row
@@ -95,8 +99,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Rule rule = new Rule();
                 rule.id = Integer.parseInt(cursor.getString(0));
                 rule.name = cursor.getString(1);
-                rule.rule = cursor.getString(2);
-                rule.destinationFolder = cursor.getString(3);
+                rule.fromRule = cursor.getString(2);
+                rule.contentRule = cursor.getString(3);
+                rule.doAndRule = Boolean.parseBoolean(cursor.getString(4));
+                rule.destinationFolder = cursor.getString(5);
 
                 ruleList.add(rule);
             } while (cursor.moveToNext());

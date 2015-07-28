@@ -19,10 +19,11 @@ public class RuleActivity extends Activity {
          * */
         // Inserting RULES
         Log.d("Insert: ", "Inserting ..");
-        db.addRule(new Rule("Rule1", "Tag1", "Folder1"));
-        db.addRule(new Rule("Rule2", "Tag2", "Folder2"));
-        db.addRule(new Rule("Rule3", "Tag3", "Folder3"));
-        db.addRule(new Rule("Rule4", "Tag4", "Folder4"));
+        db.addRule(new Rule("Rule1", "FromTag1", "MessageBody1", true, "Folder1"));
+        db.addRule(new Rule("Rule1", "FromTag2","MessageBody2",true, "Folder1"));
+        db.addRule(new Rule("Rule1", null,"MessageBody3",false, "Folder1"));
+        db.addRule(new Rule("Rule1", "FromTag3",null,false, "Folder1"));
+
 
         //InsertMessageHash
 
@@ -38,7 +39,7 @@ public class RuleActivity extends Activity {
         List<MessageHash> msgs2 = db.QueryMessges("SBI");
 
         for (Rule cn : rules) {
-            String log = "Id: "+cn.id+" ,Name: " + cn.name + " ,Expression: " + cn.rule + ", Destination:" + cn.destinationFolder;
+            String log = "Id: "+cn.id+" ,Name: " + cn.name + " ,FromExpression: " + cn.fromRule + ", MessageBodyExp: "+ cn.contentRule + ", DoAndExpression: " + cn.doAndRule + ", Destination:" + cn.destinationFolder;
             // Writing Rules to log
             Log.d("Name: ", log);
         }

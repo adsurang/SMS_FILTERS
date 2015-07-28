@@ -37,6 +37,7 @@ public class MySMSReceiver extends BroadcastReceiver {
         String DisplayMessage = shortMessage.getDisplayMessageBody();
         Long msg_id = getId(shortMessage, context);
 
+
         Log.d("SMSReceiver", "SMS message sender: " + SmsSender);
         Log.d("SMSReceiver","SMS message text: "+ DisplayMessage);
 
