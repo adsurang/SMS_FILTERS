@@ -118,7 +118,7 @@ public class JavaScriptInterface {
     private boolean isContains(String address, String fromRule) {
         String[] fromRules = fromRule.split(";");
         for (int i=0; i<fromRules.length; i++){
-            if(address.contains(fromRule)){
+            if(address.contains(fromRules[i])){
                 return true;
             }
         }
