@@ -14,6 +14,7 @@ public class Rule {
     public Rule(String name, String fromRule){
         this.name = name;
         this.fromRule = fromRule;
+        this.destinationFolder = name;
     }
 
     public Rule( String name, String fromRule, String contentRule, boolean isAndRule, String destination ){

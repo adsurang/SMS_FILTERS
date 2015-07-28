@@ -47,13 +47,14 @@ public class JavaScriptInterface {
         List<Integer> validMessageIds = new ArrayList<>();
         if(!getAllMessages) {
             for (int i = 0; i < messageHashList.size(); i++) {
-                validMessageIds.add(messageHashList.get(i).id);
+                validMessageIds.add(messageHashList.get(i).msgId);
             }
             Collections.sort(validMessageIds);
         }
 
         if (c.moveToFirst()) {
-            for (int i = 0; i < 10; i++) {
+            int limit = c.getCount() < 100 ? c.getCount() : 100;
+            for (int i = 0; i < limit; i++) {
                 objSms = new Sms();
                 int messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
                 if(getAllMessages || validMessageIds.contains(messageId)){
@@ -97,7 +98,8 @@ public class JavaScriptInterface {
         Cursor c = cr.query(message, null, null, null, null);
 
         if (c.moveToFirst()) {
-            for (int i = 0; i < 2; i++) {
+            int limit = c.getCount() < 100 ? c.getCount() : 100;
+            for (int i = 0; i < c.getCount(); i++) {
                 messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
                 address = (c.getString(c
                         .getColumnIndexOrThrow("address")));
@@ -128,7 +130,7 @@ public class JavaScriptInterface {
 
         DatabaseHandler db = new DatabaseHandler(this.activity);
 
-        /*Sample Rules */
+        /*Sample Rules
         db.addRule(new Rule("Rule1", "FromTag1", "MessageBody1", true, "Folder1"));
         db.addRule(new Rule("Rule2", "FromTag2","MessageBody2",true, "Folder2"));
         db.addRule(new Rule("Rule3", null,"MessageBody3",false, "Folder3"));
@@ -139,7 +141,7 @@ public class JavaScriptInterface {
         db.addRule(new Rule("Rule8", null,"MessageBody3",false, "Folder7"));
         db.addRule(new Rule("Rule9", null,"MessageBody3",false, "Folder8"));
 
-
+*/
 
 
         List<Rule> rules = db.getAllRules();
@@ -166,10 +168,6 @@ public class JavaScriptInterface {
 
         DatabaseHandler db = new DatabaseHandler(this.activity);
 
-        db.addMessage(new MessageHash(733, "Folder1,Folder2, Folder3"));
-        db.addMessage(new MessageHash(734, "Folder2, Folder4"));
-        db.addMessage(new MessageHash(735, "Folder2"));
-
-        List<MessageHash> msgs2 = db.QueryMessges(folderName);
+        List<Sms> msgs2 = getSmses(folderName);
     }
 }
