@@ -1,16 +1,183 @@
 <html>
 <script>
 function showAllSMS(){
-    //alert(window.JSInterface.showAllSMS());
-    var serailizedmsg =   window.JSInterface.showAllSMS()
-    var smses = JSON.parse(text);
-    alert(smses);
+    //JSON.parse(window.JSInterface.showAllSMS());
+     alert(window.JSInterface.showAllSMS());
 }
 </script>
 <head>
-    All Messages
+    <title>SMS Filter</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
-<input type="button" value="ShowAllSMS" onClick="showAllSMS()" />
+<style>
+    .newstyle {
+    width:49%;
+    }
+
+
+
+
+    table,tbody{
+    display:block;
+    }
+
+    tbody {
+    border: 1px black;
+    font-size:50px;
+    width:100%;
+    Height: 400px;
+    overflow-y: auto;    /* Trigger vertical scroll    */
+
+
+    }
+
+    td {
+    width:300px;
+    }
+
+    button {
+    width:100%;
+    height:40px;
+    font-size:25px;
+    }
+
+    .line {
+    height:30px;
+    font-size:15px;
+    }
+
+    .fromname{
+    height:70px;
+    font-size:25px;
+    }
+
+</style>
+<div class="container">
+    <h2>SMS Filter</h2>
+    <ul class="nav nav-pills">
+        <li class="active newstyle"><a data-toggle="pill" href="#home">Folders</a></li>
+        <li class="newstyle"><a data-toggle="pill" href="#menu1">Message</a></li>
+    </ul>
+    <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+            <table >
+
+                <tr bgcolor="#00CED1">
+                    <td>ICICI</td>
+
+                </tr>
+                <tr bgcolor="#20B2AA">
+                    <td>SBI</td>
+
+                </tr>
+
+                <tr bgcolor="#00CED1">
+                    <td>BookMyShow</td>
+
+                </tr>
+                <tr bgcolor="#20B2AA">
+                    <td>Shopping</td>
+
+                </tr>
+            </table>
+        </div>
+        <div id="menu1" class="tab-pane fade">
+            <table  >
+
+                <tbody>
+                <tr bgcolor="#00CED1">
+                    <td>
+                        <div class="fromname">
+                            ICICI
+                        </div>
+
+                        <div class="line">
+                            your salary is 200000 Rs.
+                        </div>
+                    </td>
+
+                </tr>
+                <tr bgcolor="#FFFFFF">
+                    <td>
+                        <div class="fromname">
+                            BookMyShow
+                        </div>
+
+                        <div class="line">
+                            go and watch Bajrangi bhaijaan
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr bgcolor="#00CED1">
+                    <td>
+                        <div class="fromname">
+                            ATM
+                        </div>
+
+                        <div class="line">
+                            you have debited 1500/- from ATM
+                        </div>
+                    </td>
+
+                </tr>
+                <tr bgcolor="#FFFFFF">
+                    <td>
+                        <div class="fromname">
+                            MakeMyTrip
+                        </div>
+
+                        <div class="line">
+                            go and visit jaipur
+                        </div>
+                    </td>
+
+                </tr>
+
+                <tr bgcolor="#00CED1">
+                    <td>ICICI</td>
+
+                </tr>
+                <tr bgcolor="#FFFFFF">
+                    <td>SBI</td>
+
+                </tr>
+
+                <tr bgcolor="#00CED1">
+                    <td>ICICI</td>
+
+                </tr>
+                <tr bgcolor="#FFFFFF">
+                    <td>SBI</td>
+
+                </tr>
+                <tr bgcolor="#00CED1">
+                    <td>ICICI</td>
+
+                </tr>
+                <tr bgcolor="#FFFFFF">
+                    <td>SBI</td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+            <h3>Menu 2</h3>
+            <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+        </div>
+        <div id="menu3" class="tab-pane fade">
+            <h3>Menu 3</h3>
+            <p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+        </div>
+        <button type="button" class="button">Create Filter</button>
+    </div>
+</div>
 </body>
 </html>
