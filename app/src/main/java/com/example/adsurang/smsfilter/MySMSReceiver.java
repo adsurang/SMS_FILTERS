@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.net.Uri;
 import android.provider.Telephony;
 import android.support.v7.app.ActionBarActivity;
@@ -16,12 +17,16 @@ import android.view.MenuItem;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 
 /**
  * Created by adsurang on 7/27/2015.
  */
 public class MySMSReceiver extends BroadcastReceiver {
+
+    public static final String SMS_CONTENT_INBOX = "content://sms/inbox";
+
     @Override
     public void onReceive(Context context, Intent intent){
         //do something with the message received
@@ -30,6 +35,7 @@ public class MySMSReceiver extends BroadcastReceiver {
 
         String SmsSender = shortMessage.getOriginatingAddress();
         String DisplayMessage = shortMessage.getDisplayMessageBody();
+        Long msg_id = getId(shortMessage, context);
 
 
         Log.d("SMSReceiver", "SMS message sender: " + SmsSender);
@@ -40,6 +46,28 @@ public class MySMSReceiver extends BroadcastReceiver {
 
         Log.d("SMSReceiver", "SMS message sender: " + SmsSender);
         Log.d("SMSReceiver","SMS message text: "+ DisplayMessage);
+    }
+
+    public static long getId(SmsMessage msg, Context context){
+
+        String idType = "id";
+        //Logger.log(CLASS_TAG, "getId(): Locate message id or thread id: idType:" + idType);
+        Uri uriSms=Uri.parse(SMS_CONTENT_INBOX);
+        StringBuilder sb=new StringBuilder();
+        sb.append("address='" + msg.getOriginatingAddress() + "' AND ");
+        sb.append("body=" + DatabaseUtils.sqlEscapeString(msg.getMessageBody()));
+        Cursor c=context.getContentResolver().query(uriSms, null, sb.toString(), null, null);
+        if (c.getCount() > 0 && c != null) {
+            c.moveToFirst();
+            if (idType.equals("id")) {
+                return c.getLong(c.getColumnIndex("_id"));
+            }
+            else     if (idType.equals("thread")) {
+                return c.getLong(c.getColumnIndex("thread_id"));
+            }
+            c.close();
+        }
+        return 0;
     }
 
     public List<Sms> getAllSms(Context context) {
@@ -92,6 +120,5 @@ public class MySMSReceiver extends BroadcastReceiver {
 
         }
         return sms;
-
     }
 }
