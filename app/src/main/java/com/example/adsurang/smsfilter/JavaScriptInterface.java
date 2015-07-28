@@ -10,6 +10,7 @@ import android.net.Uri;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -26,51 +27,100 @@ public class JavaScriptInterface {
     }
 
     @android.webkit.JavascriptInterface
-    public String showAllSMS() {
-        //Intent intent = new Intent(Intent.ACTION_VIEW);
+    public String showAllSMS(String ruleName) {
+        List<Sms> lstSms = getSmses(ruleName);
+        Gson gson = new Gson();
+        String Json = gson.toJson(lstSms);
+        return  Json;
+    }
 
+    private List<Sms> getSmses(String ruleName) {
         List<Sms> lstSms = new ArrayList<Sms>();
         Sms objSms = new Sms();
         Uri message = Uri.parse("content://sms/");
-
+        boolean getAllMessages = (ruleName == null || ruleName.isEmpty());
         ContentResolver cr = context.getContentResolver();
-
         Cursor c = cr.query(message, null, null, null, null);
-        //context.getActivity().startManagingCursor(c);
-        int totalSMS = c.getCount();
+        DatabaseHandler db = new DatabaseHandler(this.context);
+
+        List<MessageHash> messageHashList = db.QueryMessges(ruleName);
+        List<Integer> validMessageIds = new ArrayList<>();
+        if(!getAllMessages) {
+            for (int i = 0; i < messageHashList.size(); i++) {
+                validMessageIds.add(messageHashList.get(i).id);
+            }
+            Collections.sort(validMessageIds);
+        }
 
         if (c.moveToFirst()) {
             for (int i = 0; i < 2; i++) {
-
                 objSms = new Sms();
-                objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
-                objSms.setAddress(c.getString(c
-                        .getColumnIndexOrThrow("address")));
-                objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
-                objSms.setReadState(c.getString(c.getColumnIndex("read")));
-                objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
-                if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
-                    objSms.setFolderName("inbox");
-                } else {
-                    objSms.setFolderName("sent");
+                int messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
+                if(getAllMessages || validMessageIds.contains(messageId)){
+                    objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
+                    objSms.setAddress(c.getString(c
+                            .getColumnIndexOrThrow("address")));
+                    objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
+                    objSms.setReadState(c.getString(c.getColumnIndex("read")));
+                    objSms.setTime(c.getString(c.getColumnIndexOrThrow("date")));
+                    if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
+                        objSms.setFolderName("inbox");
+                    } else {
+                        objSms.setFolderName("sent");
+                    }
+                    lstSms.add(objSms);
                 }
-
-                lstSms.add(objSms);
                 c.moveToNext();
             }
         }
-        // else {
-        // throw new RuntimeException("You have no SMS");
-        // }
+
         c.close();
-        //activity.getApplication()
-        //intent.setDataAndType(Uri.parse("file:///android_asset/CreateOrUpdateRule.html"), "");
-        //activity.startActivity(intent);
-        Gson gson = new Gson();
+        db.close();
 
-        String Json = gson.toJson(lstSms);
+        return lstSms;
+    }
 
-        return  Json;
+    @android.webkit.JavascriptInterface
+    public void createApplyFromRule(String ruleName, String fromRule) {
+        String address;
+        int messageId;
+
+        // Add rule
+        DatabaseHandler db = new DatabaseHandler(this.context);
+        db.addRule(new Rule(ruleName, fromRule));
+
+        // Apply Rule
+        List<MessageHash> messageHashList = new ArrayList<MessageHash>();
+        Uri message = Uri.parse("content://sms/");
+
+        ContentResolver cr = context.getContentResolver();
+        Cursor c = cr.query(message, null, null, null, null);
+
+        if (c.moveToFirst()) {
+            for (int i = 0; i < 2; i++) {
+                messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
+                address = (c.getString(c
+                        .getColumnIndexOrThrow("address")));
+                if(isContains(address, fromRule)){
+                    messageHashList.add(new MessageHash(messageId, fromRule));
+                }
+                c.moveToNext();
+            }
+        }
+        c.close();
+
+        db.addMessages(messageHashList);
+        db.close();
+    }
+
+    private boolean isContains(String address, String fromRule) {
+        String[] fromRules = fromRule.split(";");
+        for (int i=0; i<fromRules.length; i++){
+            if(address.contains(fromRule)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @android.webkit.JavascriptInterface

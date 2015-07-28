@@ -11,14 +11,15 @@ public class Rule {
     public boolean doAndRule;
     public String destinationFolder;
 
-    public Rule(){
-
+    public Rule(String name, String fromRule){
+        this.name = name;
+        this.fromRule = fromRule;
     }
 
-    public Rule( String name, String fromrule, String contentRule, boolean isAndRule, String destination ){
+    public Rule( String name, String fromRule, String contentRule, boolean isAndRule, String destination ){
 
         this.name = name;
-        this.fromRule = fromrule;
+        this.fromRule = fromRule;
         this.contentRule = contentRule;
         this.doAndRule = isAndRule;
         this.destinationFolder = destination;

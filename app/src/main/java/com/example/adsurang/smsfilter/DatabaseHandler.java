@@ -96,10 +96,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                Rule rule = new Rule();
+                Rule rule = new Rule(cursor.getString(1), cursor.getString(2));
                 rule.id = Integer.parseInt(cursor.getString(0));
-                rule.name = cursor.getString(1);
-                rule.fromRule = cursor.getString(2);
                 rule.contentRule = cursor.getString(3);
                 rule.doAndRule = Boolean.parseBoolean(cursor.getString(4));
                 rule.destinationFolder = cursor.getString(5);
@@ -136,6 +134,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
         else{
             updateMessage(message);
+        }
+    }
+
+    public void addMessages(List<MessageHash> messages){
+
+        for (int i = 0; i < messages.size(); i++) {
+            addMessage(messages.get(i));
         }
     }
 
