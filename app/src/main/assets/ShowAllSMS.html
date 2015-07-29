@@ -104,6 +104,11 @@ table.innerHTML = "";
 </head>
 <body>
 <style>
+
+    .appName{
+    background-color:#DCDCDC;
+    }
+
     .newstyle {
     width:49%;
     }
@@ -157,10 +162,10 @@ table.innerHTML = "";
 
 </style>
 <div class="container">
-    <h2>SMS Filter</h2>
+    <h2 class="appName">SMS FILTER</h2>
     <ul class="nav nav-pills">
-        <li id="foldertab" class="active newstyle"><a data-toggle="pill" href="#home">Folders</a></li>
-        <li id="messagetab" class="newstyle"><a data-toggle="pill" href="#menu1">Message</a></li>
+        <li id="foldertab" class="active newstyle"><a data-toggle="pill" href="#home">Home</a></li>
+        <li id="messagetab" class="newstyle"><a id="MessageType" data-toggle="pill" href="#menu1"></a></li>
     </ul>
     <div class="tab-content">
         <div id="home" class="tab-pane fade in active">
@@ -195,7 +200,8 @@ function AddFolders(){
        var cell1 = row.insertCell(0);
        //var cell2 = row.insertCell(1);
        //var cell3 = row.insertCell(2);
-       cell1.innerHTML = filters[i].name;
+       //cell1.innerHTML = filters[i].name;
+       cell1.innerHTML = "<td> <div class=\"fromname\">" + filters[i].name+ "</div> <div class=\"line\">"+filters[i].messageCount +" Messages "+"</div> </td>";
        //cell2.innerHTML = filters[i].newMessageAvailable;
        //cell3.innerHTML = filters[i].messageCount;
 	}
@@ -215,8 +221,8 @@ function addRowHandlers() {
             {
                 return function() {
                                         var cell = row.getElementsByTagName("td")[0];
-                                        var id = cell.innerHTML;
-                                        onRowClick(id);
+                                        var folderdiv = $(cell).find(".fromname").html();
+                                        onRowClick(folderdiv);
                                  };
             }
 
@@ -233,6 +239,9 @@ function onRowClick(folderName){
      $jquery = document.getElementById("messagetab");
      $jquery.classList.add("active");
 
+     $jquery = document.getElementById("MessageType");
+     $jquery.innerHTML = folderName;
+
      $jquery = document.getElementById("home");
      $jquery.classList.remove("active");
     $jquery.classList.remove("in");
@@ -246,7 +255,9 @@ function onRowClick(folderName){
             <div class="folderTable">
             <table id="folders" style="width:100%">
                 <tr class="odd">
-                    <td>All</td>
+                    <td>
+                        <div class="fromname">All</div>
+                    </td>
                 </tr>
                 <script type="text/javascript">
                      AddFolders();
