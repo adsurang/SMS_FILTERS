@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -110,6 +111,24 @@ public class JavaScriptInterface {
             }
         }
         c.close();
+
+        db.addMessages(messageHashList);
+        db.close();
+    }
+
+    public void applyRuleOnSms(long smsId, String smsAddress, String smsBody){
+        DatabaseHandler db = new DatabaseHandler(this.context);
+        List<Rule> rules = db.getAllRules();
+        List<MessageHash> messageHashList = new ArrayList<MessageHash>();
+        Rule rule;
+
+        Iterator<Rule> rulesIterator = rules.iterator();
+        while (rulesIterator.hasNext()){
+            rule = rulesIterator.next();
+            if(isContains(smsAddress, rule.fromRule)){
+                messageHashList.add(new MessageHash((int)smsId, rule.name));
+            }
+        }
 
         db.addMessages(messageHashList);
         db.close();
