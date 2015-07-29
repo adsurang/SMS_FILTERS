@@ -178,7 +178,7 @@ function AddFolders(){
 
 
     var table = document.getElementById("folders");
-
+    table.innerHTML = "<tr class=\"odd\"><td><div class=\"fromname\">All</div></td></tr>";
     for(var i=0; i< filters.length; i++){
 	var row = table.insertRow(1);
 	if(filters.length %2 ==0){
