@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -33,6 +34,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_FROMEXPRESSION = "fromexpression";
     private static final String KEY_MESSAGEBODYEXPRESSION = "messagebodyexpression";
     private static final String KEY_DOANDEXPRESSION = "doandexpressions";
+    private static final String KEY_NEWMESSAGEAVAILABLEEXPRESSION = "newmessageavailableexpressions";
+    private static final String KEY_TOTALMESSAGESEXPRESSION = "totalmessagesexpressions";
     private static final String KEY_DESTINATION = "destination";
     private static final String TAGS_ID = "id";
     private static final String TAGS_MSG_ID = "msg_id";
@@ -49,7 +52,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_RULES_TABLE = "CREATE TABLE " + TABLE_RULES + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_NAME + " TEXT,"
-                + KEY_FROMEXPRESSION + " TEXT," + KEY_MESSAGEBODYEXPRESSION + " TEXT," + KEY_DOANDEXPRESSION + " TEXT," + KEY_DESTINATION + " TEXT" + ")";
+                + KEY_FROMEXPRESSION + " TEXT," + KEY_MESSAGEBODYEXPRESSION + " TEXT," + KEY_NEWMESSAGEAVAILABLEEXPRESSION + " TEXT," + KEY_TOTALMESSAGESEXPRESSION + " INTEGER," + KEY_DESTINATION + " TEXT" + ")";
 
         String CREATE_TAGS_TABLE = "CREATE TABLE " + TABLE_TAGS + "("
                 + TAGS_ID + " INTEGER PRIMARY KEY," + TAGS_MSG_ID + " INTEGER, "
@@ -72,11 +75,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void addRule(Rule newRule) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        db.delete(TABLE_RULES, KEY_NAME + " = ?",
+                new String[]{String.valueOf(newRule.name)});
+
         ContentValues values = new ContentValues();
         values.put(KEY_NAME, newRule.name);
         values.put(KEY_FROMEXPRESSION, newRule.fromRule);
         values.put(KEY_MESSAGEBODYEXPRESSION, newRule.contentRule);
-        values.put(KEY_DOANDEXPRESSION, newRule.doAndRule);
+        values.put(KEY_TOTALMESSAGESEXPRESSION, newRule.messageCount);
+        values.put(KEY_NEWMESSAGEAVAILABLEEXPRESSION, newRule.newMessageAvailable);
         values.put(KEY_DESTINATION, newRule.destinationFolder);
 
         // Inserting Row
@@ -84,6 +91,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+    public void addRules(List<Rule> rules) {
+        Iterator<Rule> rulesIterator = rules.iterator();
+        while(rulesIterator.hasNext()){
+            Rule rule = rulesIterator.next();
+            addRule(rule);
+        }
+    }
     // Getting All Rules
     public List<Rule> getAllRules() {
         List<Rule> ruleList = new ArrayList<Rule>();
@@ -99,8 +113,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 Rule rule = new Rule(cursor.getString(1), cursor.getString(2));
                 rule.id = Integer.parseInt(cursor.getString(0));
                 rule.contentRule = cursor.getString(3);
-                rule.doAndRule = Boolean.parseBoolean(cursor.getString(4));
-                rule.destinationFolder = cursor.getString(5);
+                rule.newMessageAvailable = Boolean.parseBoolean(cursor.getString(4));
+                rule.messageCount = Integer.parseInt(cursor.getString(5));
+                rule.destinationFolder = cursor.getString(6);
 
                 ruleList.add(rule);
             } while (cursor.moveToNext());
