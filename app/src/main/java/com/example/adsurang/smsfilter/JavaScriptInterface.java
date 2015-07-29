@@ -58,8 +58,8 @@ public class JavaScriptInterface {
         }
 
         if (c.moveToFirst()) {
-            int limit = c.getCount() < 100 ? c.getCount() : 100;
-            for (int i = 0; i < c.getCount(); i++) {
+            int limit = c.getCount() < 200 ? c.getCount() : 200;
+            for (int i = 0; i < limit; i++) {
                 objSms = new Sms();
                 int messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
                 if(getAllMessages || validMessageIds.contains(messageId)){
@@ -104,8 +104,8 @@ public class JavaScriptInterface {
         Cursor c = cr.query(message, null, null, null, null);
 
         if (c.moveToFirst()) {
-            int limit = c.getCount() < 100 ? c.getCount() : 100;
-            for (int i = 0; i < c.getCount(); i++) {
+            int limit = c.getCount() < 200 ? c.getCount() : 200;
+            for (int i = 0; i < limit; i++) {
                 messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
                 address = (c.getString(c
                         .getColumnIndexOrThrow("address")));
