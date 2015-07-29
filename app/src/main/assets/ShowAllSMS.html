@@ -17,7 +17,7 @@
 
     var table = document.getElementById("messages");
 table.innerHTML = "";
-    for(var i=0; i< objectMsgs.length; i++){
+    for(var i=objectMsgs.length -1; i>=0; i--){
 	var row = table.insertRow(0);
 	if((i+1)%2 == 0){
 	row.className = "msgeven";
@@ -164,7 +164,7 @@ table.innerHTML = "";
 <div class="container">
     <h2 class="appName">SMS FILTER</h2>
     <ul class="nav nav-pills">
-        <li id="foldertab" class="active newstyle"><a data-toggle="pill" href="#home">Home</a></li>
+        <li id="foldertab" class="active newstyle" onclick="AddFolders()"><a data-toggle="pill" href="#home">Home</a></li>
         <li id="messagetab" class="newstyle"><a id="MessageType" data-toggle="pill" href="#menu1"></a></li>
     </ul>
     <div class="tab-content">
