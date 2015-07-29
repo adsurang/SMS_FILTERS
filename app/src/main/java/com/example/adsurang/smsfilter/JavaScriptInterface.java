@@ -27,6 +27,10 @@ public class JavaScriptInterface {
         this.context = activity.getApplicationContext();
     }
 
+    public JavaScriptInterface(Context context){
+        this.context = context;
+    }
+
     @android.webkit.JavascriptInterface
     public String showAllSMS(String ruleName) {
         List<Sms> lstSms = getSmses(ruleName);

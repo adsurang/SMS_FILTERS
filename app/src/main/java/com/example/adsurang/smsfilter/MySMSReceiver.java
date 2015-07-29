@@ -1,5 +1,6 @@
 package com.example.adsurang.smsfilter;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -46,6 +47,12 @@ public class MySMSReceiver extends BroadcastReceiver {
 
         Log.d("SMSReceiver", "SMS message sender: " + SmsSender);
         Log.d("SMSReceiver","SMS message text: "+ DisplayMessage);
+
+       // Activity activity =  (Activity)context.getApplicationContext();
+
+        JavaScriptInterface jsInterface = new JavaScriptInterface(context);
+
+        jsInterface.applyRuleOnSms(msg_id, SmsSender, DisplayMessage);
     }
 
     public static long getId(SmsMessage msg, Context context){
