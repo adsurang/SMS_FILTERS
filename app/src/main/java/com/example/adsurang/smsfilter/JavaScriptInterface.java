@@ -55,7 +55,7 @@ public class JavaScriptInterface {
 
         if (c.moveToFirst()) {
             int limit = c.getCount() < 100 ? c.getCount() : 100;
-            for (int i = 0; i < limit; i++) {
+            for (int i = 0; i < c.getCount(); i++) {
                 objSms = new Sms();
                 int messageId = Integer.parseInt(c.getString(c.getColumnIndexOrThrow("_id")));
                 if(getAllMessages || validMessageIds.contains(messageId)){
@@ -89,7 +89,8 @@ public class JavaScriptInterface {
 
         // Add rule
         DatabaseHandler db = new DatabaseHandler(this.context);
-        db.addRule(new Rule(ruleName, fromRule));
+        Rule newRule = new Rule(ruleName, fromRule);
+        newRule.messageCount = 0;
 
         // Apply Rule
         List<MessageHash> messageHashList = new ArrayList<MessageHash>();
@@ -106,12 +107,15 @@ public class JavaScriptInterface {
                         .getColumnIndexOrThrow("address")));
                 if(isContains(address, fromRule)){
                     messageHashList.add(new MessageHash(messageId, ruleName));
+                    newRule.messageCount++;
+                    newRule.newMessageAvailable=true;
                 }
                 c.moveToNext();
             }
         }
         c.close();
 
+        db.addRule(newRule);
         db.addMessages(messageHashList);
         db.close();
     }
@@ -127,9 +131,12 @@ public class JavaScriptInterface {
             rule = rulesIterator.next();
             if(isContains(smsAddress, rule.fromRule)){
                 messageHashList.add(new MessageHash((int)smsId, rule.name));
+                rule.newMessageAvailable = true;
+                rule.messageCount++;
             }
         }
 
+        db.addRules(rules);
         db.addMessages(messageHashList);
         db.close();
     }
@@ -146,39 +153,17 @@ public class JavaScriptInterface {
 
     @android.webkit.JavascriptInterface
     public String getALLFolders() {
-
         DatabaseHandler db = new DatabaseHandler(this.activity);
-
-        /*Sample Rules
-        db.addRule(new Rule("Rule1", "FromTag1", "MessageBody1", true, "Folder1"));
-        db.addRule(new Rule("Rule2", "FromTag2","MessageBody2",true, "Folder2"));
-        db.addRule(new Rule("Rule3", null,"MessageBody3",false, "Folder3"));
-        db.addRule(new Rule("Rule4", "FromTag3", null, false, "Folder1"));
-        db.addRule(new Rule("Rule5", null,"MessageBody3",false, "Folder4"));
-        db.addRule(new Rule("Rule6", null,"MessageBody3",false, "Folder5"));
-        db.addRule(new Rule("Rule7", null,"MessageBody3",false, "Folder6"));
-        db.addRule(new Rule("Rule8", null,"MessageBody3",false, "Folder7"));
-        db.addRule(new Rule("Rule9", null,"MessageBody3",false, "Folder8"));
-
-*/
-
-
         List<Rule> rules = db.getAllRules();
-
         List<String> folders = new ArrayList<String>();
 
-        Integer i =0;
-
-        for(i=0;i<rules.size();i++){
+        for(int i=0;i<rules.size();i++){
             folders.add(rules.get(i).destinationFolder);
         }
 
         HashSet<String> uniqueFolders = new HashSet<String>(folders);
-
         Gson gson = new Gson();
-
-        String Json = gson.toJson(uniqueFolders);
-
+        String Json = gson.toJson(rules);
         return  Json;
     }
 
