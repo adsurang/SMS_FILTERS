@@ -104,7 +104,7 @@ public class JavaScriptInterface {
                 address = (c.getString(c
                         .getColumnIndexOrThrow("address")));
                 if(isContains(address, fromRule)){
-                    messageHashList.add(new MessageHash(messageId, fromRule));
+                    messageHashList.add(new MessageHash(messageId, ruleName));
                 }
                 c.moveToNext();
             }
@@ -169,5 +169,11 @@ public class JavaScriptInterface {
         DatabaseHandler db = new DatabaseHandler(this.activity);
 
         List<Sms> msgs2 = getSmses(folderName);
+    }
+
+    @android.webkit.JavascriptInterface
+    public void onCreateRuleClicked() {
+        Intent intent = new Intent(this.activity, RuleActivity.class);
+        this.activity.startActivity(intent);
     }
 }

@@ -2,8 +2,13 @@ package com.example.adsurang.smsfilter;
 
 import java.util.List;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class RuleActivity extends Activity {
@@ -13,35 +18,64 @@ public class RuleActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         DatabaseHandler db = new DatabaseHandler(this);
+        JavaScriptInterface jsInterface = new JavaScriptInterface(this);
+
+        WebView webview = new WebView(this);
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.addJavascriptInterface(jsInterface, "android");
+
+        addListenerOnButton();
 
         /**
          * CRUD Operations
          * */
         // Inserting RULES
-        Log.d("Insert: ", "Inserting ..");
-        db.addRule(new Rule("Rule1", "FromTag1", "MessageBody1", true, "Folder1"));
-        db.addRule(new Rule("Rule1", "FromTag2","MessageBody2",true, "Folder1"));
-        db.addRule(new Rule("Rule1", null,"MessageBody3",false, "Folder1"));
-        db.addRule(new Rule("Rule1", "FromTag3",null,false, "Folder1"));
 
+    }
 
-        //InsertMessageHash
+    private void addListenerOnButton() {
 
-        db.addMessage(new MessageHash(733, "ICICI,FLIPKART, ADHAR"));
-        db.addMessage(new MessageHash(734, "SBI, PANKAJ"));
-        db.addMessage(new MessageHash(735, "ABHINAV ,SBI"));
+        //Select a specific button to bundle it with the action you want
+        Button submitbutton = (Button) findViewById(R.id.SMS_Submit);
 
-        // Reading all Rules
-        Log.d("Reading: ", "Reading all Rules..");
-        List<Rule> rules = db.getAllRules();
+        final RuleActivity ra = this;
 
-        List<MessageHash> msgs1 = db.QueryMessges("ABHINAV");
-        List<MessageHash> msgs2 = db.QueryMessges("SBI");
+        submitbutton.setOnClickListener(new View.OnClickListener() {
 
-        for (Rule cn : rules) {
-            String log = "Id: "+cn.id+" ,Name: " + cn.name + " ,FromExpression: " + cn.fromRule + ", MessageBodyExp: "+ cn.contentRule + ", DoAndExpression: " + cn.doAndRule + ", Destination:" + cn.destinationFolder;
-            // Writing Rules to log
-            Log.d("Name: ", log);
-        }
+            @Override
+            public void onClick(View view) {
+
+                EditText smsFrom = (EditText) findViewById(R.id.SMS_INFrom);
+                EditText smsTargetFolder = (EditText) findViewById(R.id.SMS_TargetFolder);
+                //EditText smsContent   = (EditText)findViewById(R.id.SMS_IPCont);
+                //CheckBox smsAndCheck = (CheckBox)findViewById(R.id.SMS_AndChk);
+                String smsFromString = smsFrom.getText().toString();
+                String smsTargetFolderString = smsTargetFolder.getText().toString();
+                //  String smsContentFltString = smsContent.getText().toString();
+                // boolean smsAndCheckStr = smsAndCheck.isChecked();
+
+                JavaScriptInterface jsInterface = new JavaScriptInterface(ra);
+
+                jsInterface.createApplyFromRule(smsTargetFolderString, smsFromString);
+
+                Intent intent = new Intent(ra, MainActivity.class);
+                ra.startActivity(intent);
+
+            }
+
+        });
+
+        Button cancelbutton = (Button) findViewById(R.id.SMS_Cancel);
+
+        cancelbutton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ra, MainActivity.class);
+                ra.startActivity(intent);
+            }
+
+        });
+
     }
 }
