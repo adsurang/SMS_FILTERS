@@ -26,19 +26,81 @@ table.innerHTML = "";
 	row.className = "msgodd";
 	}
 
+         var messageview =
+            function(message,sender)
+            {
+                return function() {
+                                       jAlert(message, sender);
+                                 };
+            }
+       row.onclick = messageview(objectMsgs[i]._msg,objectMsgs[i]._address);
        var cell1 = row.insertCell(0);
        cell1.innerHTML = "<td> <div class=\"fromname\">" + objectMsgs[i]._address+ "</div> <div class=\"line\">"+objectMsgs[i]._msg+"</div> </td>";
 	}
 }
+
+
 
 </script>
 <head>
     <title>SMS Filter</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+    <meta name="description" content="This is a demonstration page." />
+    <meta name="keywords" content="confirm, prompt, demo" />
     <link rel="stylesheet" href="bootstrap.min.css">
     <script src="jquery.min.js"></script>
     <script src="bootstrap.min.js"></script>
+    <!-- Dependencies -->
+    <script src="jquery.js" type="text/javascript"></script>
+    <script src="jquery.ui.draggable.js" type="text/javascript"></script>
+
+    <!-- Core files -->
+    <script src="jquery.alerts.js" type="text/javascript"></script>
+    <link href="jquery.alerts.css" rel="stylesheet" type="text/css" media="screen" />
+
+    <style type="text/css">
+
+
+
+
+
+
+
+        /* Custom dialog styles */
+        #popup_container.style_1 {
+        font-family: Georgia, serif;
+        color: #A4C6E2;
+        background: #005294;
+        border-color: #113F66;
+        }
+
+        #popup_container.style_1 #popup_title {
+        color: #FFF;
+        font-weight: normal;
+        text-align: left;
+        background: #76A5CC;
+        border: solid 1px #005294;
+        padding-left: 1em;
+        }
+
+        #popup_container.style_1 #popup_content {
+        background: none;
+        }
+
+        #popup_container.style_1 #popup_message {
+        padding-left: 0em;
+        }
+
+        #popup_container.style_1 INPUT[type='button'] {
+        border: outset 2px #76A5CC;
+        color: #A4C6E2;
+        background: #3778AE;
+        }
+
+    </style>
+
 </head>
 <body>
 <style>
@@ -84,6 +146,7 @@ table.innerHTML = "";
     tr.even{
     height: 100px;
     font-size:50%;
+    background-color: #FFFFFF;
     }
 
     tr.odd {
