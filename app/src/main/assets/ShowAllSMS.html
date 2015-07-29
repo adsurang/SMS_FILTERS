@@ -2,8 +2,8 @@
 <script>
 
     function CreateFilter(){
-    window.JSInterface.createApplyFromRule("VFCARE", "VFCARE;611112");
-    }
+    window.JSInterface.onCreateRuleClicked();
+   }
 
     function AddMessages(){
     var msgs;
@@ -176,11 +176,21 @@ function AddFolders(){
 
     for(var i=0; i< filters.length; i++){
 	var row = table.insertRow(1);
-	if((i+1)%2 == 0){
+	if(filters.length %2 ==0){
+	if((i)%2 == 0){
+	row.className = "odd";
+	}
+	else{
+	row.className = "even";
+	}
+	}
+	else{
+	if((i)%2 == 0){
 	row.className = "even";
 	}
 	else{
 	row.className = "odd";
+	}
 	}
 
        var cell1 = row.insertCell(0);
